@@ -1,18 +1,23 @@
 import { test, expect } from '@playwright/test';
+import { LoginModalWindow } from '../page-objects/LoginModalWindow';
 
-test('has title', async ({ page }) => {
-  await page.goto('https://www.saucedemo.com/');
 
-  // Expect a title "to contain" a substring.
-  await expect(page).toHaveTitle(/Playwright/);
-});
+test.describe.parallel('Login / Logout modal window',()=>{
+  let loginModalWindow :LoginModalWindow
+  
+  test.beforeEach(async({page})=>{
+    loginModalWindow = new LoginModalWindow (page)
+    await loginModalWindow.openSignInModalWindow()
+  })
 
-test('get started link', async ({ page }) => {
-  await page.goto('https://playwright.dev/');
+  test('// Valid Credentials: Ensure a user can log in with correct credentials.', async ({ page }) => {
+    await page.goto('/');
+  });
+})
 
-  // Click the get started link.
-  await page.getByRole('link', { name: 'Get started' }).click();
 
-  // Expects the URL to contain intro.
-  await expect(page).toHaveURL(/.*intro/);
-});
+//  Invalid Credentials: Try incorrect usernames and passwords to ensure the login fails appropriately.
+//  Empty Fields: Ensure appropriate error messages are displayed when one or both fields are left empty.
+//  Case Sensitivity: Ensure that the username/email and password fields handle case sensitivity properly.
+//  Remember Me: If there's a "Remember Me" option, test that it works and maintains the user's session.
+//  Password Visibility Toggle: Test the functionality of the "show/hide" password icon if available.
